@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Krama — O Universo Gamer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════
+   GLOBAL RESET & BASE
+═══════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --transition: 0.35s cubic-bezier(.4,0,.2,1);
+  /* Auth themes */
+  --bg:#fff; --bg2:#f4f4f4; --surface:#fff; --border:#d8d8d8;
+  --text:#1a1a1a; --subtext:#666; --accent:#2a2a2a; --input-bg:#fafafa;
+  --shadow:rgba(0,0,0,.08); --btn-text:#fff;
+  /* Game themes */
+  --g-bg:#0d0d0d; --g-primary:#fff; --g-accent:#e63946; --g-surface:#1a1a1a;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #0d0d0d;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SCREEN MANAGER
+═══════════════════════════════════════════════════════════ */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: block; }
+
+/* ═══════════════════════════════════════════════════════════
+   AUTH THEMES
+═══════════════════════════════════════════════════════════ */
+#screen-auth.theme-classic { --bg:#fff;--bg2:#f4f4f4;--surface:#fff;--border:#d8d8d8;--text:#1a1a1a;--subtext:#666;--accent:#2a2a2a;--input-bg:#fafafa;--shadow:rgba(0,0,0,.08);--btn-text:#fff; }
+#screen-auth.theme-dark    { --bg:#0d0d0d;--bg2:#181818;--surface:#1c1c1c;--border:#2e2e2e;--text:#f0f0f0;--subtext:#888;--accent:#e0c87a;--input-bg:#252525;--shadow:rgba(0,0,0,.4);--btn-text:#0d0d0d; }
+#screen-auth.theme-beige   { --bg:#f5ede0;--bg2:#ede0cd;--surface:#faf5ee;--border:#d6c4aa;--text:#3b2f1e;--subtext:#7a6042;--accent:#8b5e3c;--input-bg:#f8f2eb;--shadow:rgba(100,60,20,.12);--btn-text:#fff; }
+
+#screen-auth {
+  background: var(--bg);
+  color: var(--text);
+  transition: background var(--transition), color var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ★ LANDING PAGE
+═══════════════════════════════════════════════════════════ */
+#screen-landing {
+  background: #060608;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Stars bg */
+#screen-landing::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 50% 80%, rgba(255,255,255,.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 10% 60%, rgba(255,255,255,.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 50%, rgba(255,255,255,.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 65% 25%, rgba(255,255,255,.4) 0%, transparent 100%),
+    radial-gradient(2px 2px at 35% 70%, rgba(255,255,255,.3) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* LANDING NAV */
+.land-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 60px;
+  background: linear-gradient(to bottom, rgba(6,6,8,.95) 0%, transparent 100%);
+  backdrop-filter: blur(8px);
+}
+.land-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  letter-spacing: .15em;
+  background: linear-gradient(135deg, #e63946, #ff6b35);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.land-nav-links { display: flex; gap: 32px; }
+.land-nav-links a {
+  color: rgba(255,255,255,.7); text-decoration: none;
+  font-size: 14px; font-weight: 500; letter-spacing: .06em;
+  transition: color .2s;
+}
+.land-nav-links a:hover { color: #fff; }
+.land-nav-btns { display: flex; gap: 12px; }
+.land-btn {
+  padding: 10px 22px; border-radius: 8px; border: none;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all .25s; letter-spacing: .04em;
+}
+.land-btn-ghost {
+  background: rgba(255,255,255,.08); color: #fff;
+  border: 1px solid rgba(255,255,255,.15);
+}
+.land-btn-ghost:hover { background: rgba(255,255,255,.15); }
+.land-btn-red {
+  background: linear-gradient(135deg, #e63946, #c1121f);
+  color: #fff;
+}
+.land-btn-red:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(230,57,70,.4); }
+
+/* HERO */
+.land-hero {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+  padding: 120px 40px 80px;
+  overflow: hidden;
+}
+.hero-glow {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 800px; height: 800px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(230,57,70,.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(230,57,70,.12); border: 1px solid rgba(230,57,70,.3);
+  border-radius: 50px; padding: 6px 16px;
+  font-size: 12px; font-weight: 600; letter-spacing: .15em;
+  text-transform: uppercase; color: #e63946;
+  margin-bottom: 28px;
+  animation: fadeIn .8s ease both;
+}
+.hero-eyebrow::before { content:'●'; font-size:8px; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+@keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn2 { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(80px, 14vw, 160px);
+  letter-spacing: .05em;
+  line-height: .95;
+  margin-bottom: 12px;
+  animation: fadeIn .8s .15s ease both;
+}
+.hero-title span {
+  background: linear-gradient(135deg, #e63946 0%, #ff6b35 50%, #e63946 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+}
+@keyframes shimmer { 0%{background-position:0%} 100%{background-position:200%} }
+
+.hero-tagline {
+  font-size: clamp(16px,2.5vw,22px); font-weight: 300;
+  color: rgba(255,255,255,.6); max-width: 560px;
+  line-height: 1.6; margin-bottom: 48px;
+  animation: fadeIn .8s .3s ease both;
+}
+.hero-tagline strong { color: rgba(255,255,255,.9); font-weight: 600; }
+
+.hero-cta-row {
+  display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  animation: fadeIn .8s .45s ease both;
+  margin-bottom: 80px;
+}
+.hero-cta-primary {
+  padding: 16px 40px; border-radius: 10px; border: none;
+  background: linear-gradient(135deg, #e63946, #c1121f);
+  color: #fff; font-family: 'DM Sans',sans-serif;
+  font-size: 16px; font-weight: 700; letter-spacing: .04em;
+  cursor: pointer; transition: all .25s;
+}
+.hero-cta-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(230,57,70,.5); }
+.hero-cta-secondary {
+  padding: 16px 40px; border-radius: 10px;
+  background: rgba(255,255,255,.06); color: #fff;
+  border: 1px solid rgba(255,255,255,.15);
+  font-family: 'DM Sans',sans-serif; font-size: 16px; font-weight: 600;
+  cursor: pointer; transition: all .25s;
+}
+.hero-cta-secondary:hover { background: rgba(255,255,255,.12); }
+
+/* Scroll indicator */
+.scroll-hint {
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: rgba(255,255,255,.3); font-size: 11px; letter-spacing: .12em;
+  text-transform: uppercase; animation: fadeIn 1s .8s ease both;
+}
+.scroll-arrow { width: 20px; height: 30px; border: 1.5px solid rgba(255,255,255,.2); border-radius: 10px; position: relative; }
+.scroll-arrow::after { content:''; position:absolute; width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.5);left:50%;transform:translateX(-50%);top:6px;animation:scrollDot 1.8s infinite; }
+@keyframes scrollDot { 0%{top:6px;opacity:1} 100%{top:18px;opacity:0} }
+
+/* FEATURES STRIP */
+.land-features {
+  position: relative; z-index: 1;
+  padding: 40px 60px;
+  border-top: 1px solid rgba(255,255,255,.06);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  display: flex; justify-content: center; gap: 0;
+  flex-wrap: wrap;
+  background: rgba(255,255,255,.02);
+}
+.feat-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 20px 40px;
+  border-right: 1px solid rgba(255,255,255,.06);
+  flex: 1; min-width: 200px;
+}
+.feat-item:last-child { border-right: none; }
+.feat-icon {
+  font-size: 28px;
+  width: 52px; height: 52px;
+  background: rgba(230,57,70,.1); border: 1px solid rgba(230,57,70,.2);
+  border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.feat-label { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.feat-desc { font-size: 12px; color: rgba(255,255,255,.45); line-height: 1.4; }
+
+/* SECTIONS */
+.land-section {
+  position: relative; z-index: 1;
+  padding: 100px 60px;
+  max-width: 1200px; margin: 0 auto;
+}
+.section-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: .2em;
+  text-transform: uppercase; color: #e63946;
+  margin-bottom: 16px;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 5vw, 54px);
+  font-weight: 700; line-height: 1.15;
+  margin-bottom: 16px;
+}
+.section-sub {
+  font-size: 16px; color: rgba(255,255,255,.5);
+  max-width: 580px; line-height: 1.7;
+  margin-bottom: 60px;
+}
+
+/* GAME CARDS PREVIEW */
+.game-preview-grid {
+  display: grid; grid-template-columns: repeat(5,1fr); gap: 16px;
+}
+.game-prev-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px; overflow: hidden;
+  cursor: pointer; transition: all .3s;
+  aspect-ratio: 3/4; position: relative;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.game-prev-card:hover { transform: translateY(-8px); border-color: rgba(230,57,70,.4); }
+.game-prev-card:hover .game-prev-overlay { opacity: 1; }
+.game-prev-bg { position: absolute; inset: 0; font-size: 80px; display: flex; align-items: center; justify-content: center; }
+.game-prev-overlay {
+  position: absolute; inset: 0; opacity: 0; transition: opacity .3s;
+  background: linear-gradient(to top, rgba(230,57,70,.3) 0%, transparent 60%);
+}
+.game-prev-info {
+  position: relative; z-index: 1;
+  padding: 16px; background: linear-gradient(to top, rgba(0,0,0,.9) 0%, transparent 100%);
+}
+.game-prev-name { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+.game-prev-genre { font-size: 11px; color: rgba(255,255,255,.45); }
+
+/* CATEGORIES GRID */
+.cat-grid {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 20px;
+}
+.cat-card {
+  background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+  border-radius: 18px; padding: 28px 24px;
+  transition: all .3s; cursor: pointer;
+}
+.cat-card:hover { background: rgba(255,255,255,.07); border-color: rgba(230,57,70,.3); transform: translateY(-4px); }
+.cat-icon { font-size: 36px; margin-bottom: 16px; }
+.cat-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.cat-desc { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.5; }
+
+/* PROMO BANNER */
+.promo-banner {
+  position: relative; z-index: 1;
+  margin: 0 60px 100px;
+  background: linear-gradient(135deg, rgba(230,57,70,.15) 0%, rgba(193,18,31,.08) 100%);
+  border: 1px solid rgba(230,57,70,.25);
+  border-radius: 24px; padding: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 40px; overflow: hidden;
+}
+.promo-banner::before {
+  content: ''; position: absolute; right: -60px; top: -60px;
+  width: 300px; height: 300px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(230,57,70,.2) 0%, transparent 70%);
+}
+.promo-text { position: relative; z-index: 1; }
+.promo-label { font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #e63946; margin-bottom: 12px; }
+.promo-title { font-family: 'Playfair Display',serif; font-size: 36px; font-weight: 700; margin-bottom: 12px; }
+.promo-desc { font-size: 15px; color: rgba(255,255,255,.6); max-width: 400px; }
+.promo-tag { font-size: 64px; flex-shrink: 0; }
+
+/* FOOTER */
+.land-footer {
+  border-top: 1px solid rgba(255,255,255,.06);
+  padding: 40px 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  color: rgba(255,255,255,.3); font-size: 13px;
+  position: relative; z-index: 1;
+}
+.footer-logo {
+  font-family: 'Bebas Neue',sans-serif; font-size: 24px; letter-spacing: .15em;
+  background: linear-gradient(135deg,#e63946,#ff6b35);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   AUTH PAGE (mantida do original + melhorias)
+═══════════════════════════════════════════════════════════ */
+#screen-auth {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 80px 20px 40px;
+  background: var(--bg);
+}
+
+.auth-bg-deco {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+}
+.auth-bg-deco::before {
+  content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  opacity: 0.05; top: -200px; right: -200px;
+}
+.auth-bg-deco::after {
+  content: ''; position: absolute; width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  opacity: 0.06; bottom: -100px; left: -100px;
+}
+
+/* Theme bar */
+.theme-bar {
+  position: fixed; top: 20px; right: 24px;
+  display: flex; gap: 8px; z-index: 200;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 50px; padding: 6px 10px;
+  box-shadow: 0 4px 20px var(--shadow);
+  transition: all var(--transition);
+}
+.theme-bar.hidden { display: none; }
+.theme-btn {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid transparent; cursor: pointer;
+  transition: transform .2s, border-color .2s;
+}
+.theme-btn:hover { transform: scale(1.15); }
+.theme-btn.active { border-color: var(--accent); }
+.theme-btn[data-theme="classic"] { background: linear-gradient(135deg,#fff 50%,#d8d8d8 50%); }
+.theme-btn[data-theme="dark"]    { background: linear-gradient(135deg,#1c1c1c 50%,#e0c87a 50%); }
+.theme-btn[data-theme="beige"]   { background: linear-gradient(135deg,#f5ede0 50%,#8b5e3c 50%); }
+.theme-label {
+  font-size: 10px; font-weight: 600; color: var(--subtext);
+  align-self: center; margin-right: 4px;
+  letter-spacing: .06em; text-transform: uppercase;
+}
+
+.back-btn {
+  position: fixed; top: 20px; left: 24px; z-index: 200;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 50px; padding: 8px 18px;
+  font-family: 'DM Sans',sans-serif; font-size: 13px; font-weight: 600;
+  color: var(--text); cursor: pointer;
+  box-shadow: 0 4px 20px var(--shadow);
+  transition: all var(--transition);
+}
+.back-btn:hover { background: var(--accent); color: var(--btn-text); }
+
+/* Auth Card */
+.auth-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 24px; width: 100%; max-width: 560px;
+  padding: 48px 48px 40px;
+  box-shadow: 0 8px 48px var(--shadow), 0 2px 8px var(--shadow);
+  transition: all var(--transition);
+  animation: slideUp .5s cubic-bezier(.4,0,.2,1) both;
+  position: relative; z-index: 1;
+}
+@keyframes slideUp { from{opacity:0;transform:translateY(32px)} to{opacity:1;transform:translateY(0)} }
+
+.card-logo {
+  font-family: 'Playfair Display',serif; font-size: 13px; font-weight: 600;
+  letter-spacing: .25em; text-transform: uppercase; color: var(--accent);
+  margin-bottom: 24px; display: flex; align-items: center; gap: 10px;
+}
+.card-logo::before { content:''; display:inline-block; width:28px;height:2px; background:var(--accent); }
+.card-title { font-family:'Playfair Display',serif; font-size:32px; font-weight:700; color:var(--text); line-height:1.2; margin-bottom:6px; }
+.card-sub { font-size:14px; color:var(--subtext); margin-bottom:36px; font-weight:300; }
+
+.tab-row {
+  display: flex; background: var(--bg2); border-radius: 12px;
+  padding: 4px; margin-bottom: 32px; border: 1px solid var(--border);
+}
+.tab-btn {
+  flex:1; padding:10px; border:none; background:transparent;
+  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500;
+  color:var(--subtext); border-radius:9px; cursor:pointer; transition:all var(--transition);
+}
+.tab-btn.active { background:var(--surface); color:var(--text); font-weight:600; box-shadow:0 2px 12px var(--shadow); }
+
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.form-group { display:flex; flex-direction:column; gap:6px; }
+.form-group.full { grid-column:1/-1; }
+
+label { font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--subtext); }
+input, select {
+  background:var(--input-bg); border:1.5px solid var(--border); border-radius:10px;
+  padding:12px 14px; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--text);
+  outline:none; transition:all var(--transition); width:100%; -webkit-appearance:none;
+}
+input::placeholder { color:var(--subtext); opacity:.6; }
+input:focus, select:focus { border-color:var(--accent); box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 15%,transparent); background:var(--surface); }
+
+.divider { display:flex; align-items:center; gap:12px; margin:20px 0; color:var(--subtext); font-size:12px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; }
+.divider::before,.divider::after { content:''; flex:1; height:1px; background:var(--border); }
+
+.guardian-box { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:20px; display:none; animation:slideUp .3s ease both; }
+.guardian-box.show { display:block; }
+.guardian-title { font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.guardian-title::before { content:'⚠'; }
+
+.btn {
+  display:block; width:100%; padding:15px;
+  background:var(--accent); color:var(--btn-text);
+  border:none; border-radius:12px;
+  font-family:'DM Sans',sans-serif; font-size:15px; font-weight:600;
+  letter-spacing:.04em; cursor:pointer; transition:all var(--transition);
+  margin-top:28px; position:relative; overflow:hidden;
+}
+.btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px color-mix(in srgb,var(--accent) 35%,transparent); }
+.btn-outline { background:transparent; border:1.5px solid var(--border); color:var(--text); margin-top:12px; }
+.btn-outline:hover { border-color:var(--accent); color:var(--accent); box-shadow:none; }
+
+.link-row { text-align:center; margin-top:20px; font-size:13px; color:var(--subtext); }
+.link-row a { color:var(--accent); text-decoration:none; font-weight:600; }
+
+.confirm-screen { display:none; animation:slideUp .4s ease both; }
+.confirm-screen.show { display:block; }
+.confirm-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:700; margin-bottom:6px; }
+.confirm-sub { font-size:14px; color:var(--subtext); margin-bottom:24px; }
+.info-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:24px; }
+.info-item { display:flex; flex-direction:column; gap:2px; }
+.info-item.full { grid-column:1/-1; }
+.info-key { font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:var(--subtext); font-weight:600; }
+.info-val { font-size:14px; color:var(--text); font-weight:500; }
+.confirm-actions { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:4px; }
+.confirm-actions .btn { margin-top:0; }
+
+.success-screen { display:none; text-align:center; animation:slideUp .4s ease both; }
+.success-screen.show { display:block; }
+.success-icon { width:72px;height:72px;border-radius:50%; background:color-mix(in srgb,var(--accent) 15%,transparent); display:flex;align-items:center;justify-content:center; margin:0 auto 20px; font-size:30px; }
+.success-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:700; margin-bottom:8px; }
+.success-sub { font-size:14px; color:var(--subtext); margin-bottom:28px; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   ★ GAMES PAGE
+═══════════════════════════════════════════════════════════ */
+#screen-games {
+  background: var(--g-bg);
+  color: var(--g-primary);
+  transition: background 0.6s ease, color 0.3s ease;
+  min-height: 100vh;
+}
+
+/* Game themes */
+#screen-games.game-mc  { --g-bg:#1a2e0d; --g-primary:#e8f5e9; --g-accent:#4caf50; --g-surface:#243b18; --g-border:rgba(76,175,80,.25); --g-glow:rgba(76,175,80,.15); }
+#screen-games.game-rdr { --g-bg:#1a0e05; --g-primary:#f5e6c8; --g-accent:#c8832a; --g-surface:#251508; --g-border:rgba(200,131,42,.25); --g-glow:rgba(200,131,42,.15); }
+#screen-games.game-gow { --g-bg:#0a0a14; --g-primary:#d4d8e8; --g-accent:#5c7aaa; --g-surface:#10101e; --g-border:rgba(92,122,170,.25); --g-glow:rgba(92,122,170,.15); }
+#screen-games.game-tlou { --g-bg:#0d1409; --g-primary:#dde8d0; --g-accent:#8ab06b; --g-surface:#141d0e; --g-border:rgba(138,176,107,.25); --g-glow:rgba(138,176,107,.15); }
+#screen-games.game-gta { --g-bg:#000d1a; --g-primary:#d0eeff; --g-accent:#00b4ff; --g-surface:#001224; --g-border:rgba(0,180,255,.25); --g-glow:rgba(0,180,255,.15); }
+
+/* GAMES NAV */
+.games-nav {
+  position: sticky; top: 0; z-index: 100;
+  background: color-mix(in srgb, var(--g-bg) 85%, transparent);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--g-border, rgba(255,255,255,.08));
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px;
+  transition: background 0.6s, border-color 0.6s;
+}
+.games-logo {
+  font-family: 'Bebas Neue',sans-serif; font-size: 28px;
+  letter-spacing: .15em;
+  background: linear-gradient(135deg, var(--g-accent), color-mix(in srgb,var(--g-accent) 60%,white));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  padding: 18px 0;
+  transition: background 0.6s;
+}
+.games-nav-tabs {
+  display: flex; gap: 4px;
+}
+.game-tab {
+  padding: 20px 20px; border: none; background: transparent;
+  font-family: 'Rajdhani',sans-serif; font-size: 14px; font-weight: 600;
+  color: rgba(255,255,255,.4); cursor: pointer; letter-spacing: .08em;
+  text-transform: uppercase; transition: all .25s;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  position: relative;
+}
+.game-tab:hover { color: rgba(255,255,255,.8); }
+.game-tab.active { color: var(--g-accent); border-bottom-color: var(--g-accent); }
+
+.games-user-bar {
+  display: flex; align-items: center; gap: 16px;
+}
+.games-user-name { font-size: 14px; font-weight: 600; color: rgba(255,255,255,.7); }
+.games-logout {
+  padding: 8px 16px; border-radius: 8px;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+  color: rgba(255,255,255,.6); font-family:'DM Sans',sans-serif;
+  font-size:13px; cursor:pointer; transition:all .2s;
+}
+.games-logout:hover { background:rgba(255,255,255,.12); color:#fff; }
+
+/* GAME CONTENT */
+.game-content { display: none; animation: slideUp .5s ease both; }
+.game-content.active { display: block; }
+
+/* Game Hero Banner */
+.game-hero {
+  position: relative; overflow: hidden;
+  padding: 80px 60px 60px;
+  border-bottom: 1px solid var(--g-border, rgba(255,255,255,.08));
+  background: linear-gradient(to bottom, var(--g-glow,rgba(255,255,255,.03)) 0%, transparent 100%);
+}
+.game-hero-bg {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+}
+.game-hero-glow {
+  position: absolute; top: -100px; right: -100px;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, var(--g-glow,rgba(255,255,255,.05)) 0%, transparent 70%);
+}
+.game-platform-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.06); border: 1px solid var(--g-border,rgba(255,255,255,.1));
+  border-radius: 6px; padding: 4px 12px;
+  font-size: 11px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--g-accent);
+  margin-bottom: 20px;
+}
+.game-hero-title {
+  font-family: 'Bebas Neue',sans-serif;
+  font-size: clamp(48px, 8vw, 96px);
+  letter-spacing: .05em; line-height: .95;
+  color: var(--g-primary);
+  margin-bottom: 16px;
+  text-shadow: 0 0 60px var(--g-glow,rgba(255,255,255,.1));
+}
+.game-hero-desc {
+  font-size: 16px; color: color-mix(in srgb,var(--g-primary) 60%,transparent);
+  max-width: 600px; line-height: 1.7; margin-bottom: 32px;
+}
+.game-meta-row { display:flex; gap:24px; flex-wrap:wrap; }
+.game-meta { display:flex; flex-direction:column; gap:2px; }
+.game-meta-label { font-size:10px; text-transform:uppercase; letter-spacing:.12em; color:color-mix(in srgb,var(--g-primary) 40%,transparent); }
+.game-meta-val { font-size:15px; font-weight:700; color:var(--g-primary); }
+
+/* Section inside game */
+.game-section { padding: 60px 60px 0; }
+.game-section-title {
+  font-family:'Rajdhani',sans-serif; font-size:22px; font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase;
+  color: var(--g-accent);
+  padding-bottom:12px; margin-bottom:28px;
+  border-bottom: 1px solid var(--g-border,rgba(255,255,255,.08));
+  display: flex; align-items:center; gap:10px;
+}
+.game-section-title::before { content:'▶'; font-size:12px; }
+
+/* Cards grid */
+.info-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; margin-bottom:60px; }
+.info-card {
+  background:var(--g-surface,rgba(255,255,255,.04));
+  border:1px solid var(--g-border,rgba(255,255,255,.08));
+  border-radius:14px; padding:24px;
+  transition:all .3s;
+}
+.info-card:hover { border-color:var(--g-accent); transform:translateY(-4px); box-shadow:0 8px 32px var(--g-glow,rgba(255,255,255,.05)); }
+.info-card-icon { font-size:28px; margin-bottom:12px; }
+.info-card-title { font-size:16px; font-weight:700; color:var(--g-primary); margin-bottom:6px; }
+.info-card-text { font-size:13px; color:color-mix(in srgb,var(--g-primary) 55%,transparent); line-height:1.6; }
+
+/* Characters table */
+.chars-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin-bottom:60px; }
+.char-card {
+  background:var(--g-surface,rgba(255,255,255,.04));
+  border:1px solid var(--g-border,rgba(255,255,255,.08));
+  border-radius:12px; padding:20px;
+  transition:all .3s;
+}
+.char-card:hover { border-color:var(--g-accent); }
+.char-emoji { font-size:36px; margin-bottom:10px; }
+.char-name { font-size:15px; font-weight:700; color:var(--g-primary); margin-bottom:4px; }
+.char-role { font-size:12px; color:var(--g-accent); font-weight:600; letter-spacing:.06em; text-transform:uppercase; margin-bottom:8px; }
+.char-desc { font-size:12px; color:color-mix(in srgb,var(--g-primary) 50%,transparent); line-height:1.5; }
+
+/* Promo banner in game */
+.steam-promo {
+  margin: 0 60px 60px;
+  background: linear-gradient(135deg,rgba(23,37,84,.6) 0%,rgba(26,26,26,.9) 100%);
+  border: 1px solid rgba(100,149,237,.3);
+  border-radius:18px; padding:32px 40px;
+  display:flex; align-items:center; justify-content:space-between; gap:24px;
+}
+.steam-promo-info { flex:1; }
+.steam-label { font-size:11px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:#4a90e2; margin-bottom:8px; display:flex;align-items:center;gap:6px; }
+.steam-title { font-size:20px; font-weight:700; color:var(--g-primary); margin-bottom:4px; }
+.steam-price-old { font-size:13px; text-decoration:line-through; color:rgba(255,255,255,.35); }
+.steam-price-new { font-size:28px; font-weight:700; color:#4caf50; margin-top:4px; }
+.steam-discount { display:inline-block; background:#4caf50; color:#fff; font-size:14px; font-weight:700; padding:4px 10px; border-radius:6px; margin-left:10px; }
+.steam-btn {
+  padding:14px 28px; border-radius:10px; border:none;
+  background:linear-gradient(135deg,#1a73e8,#0d5bce);
+  color:#fff; font-family:'DM Sans',sans-serif;
+  font-size:14px; font-weight:700; cursor:pointer;
+  transition:all .25s; white-space:nowrap; flex-shrink:0;
+}
+.steam-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(26,115,232,.4); }
+
+/* Tips list */
+.tips-list { list-style:none; display:flex; flex-direction:column; gap:10px; margin-bottom:60px; }
+.tips-list li {
+  display:flex; align-items:flex-start; gap:12px;
+  background:var(--g-surface,rgba(255,255,255,.03));
+  border:1px solid var(--g-border,rgba(255,255,255,.07));
+  border-radius:10px; padding:16px 20px;
+  font-size:14px; color:color-mix(in srgb,var(--g-primary) 80%,transparent);
+  line-height:1.5;
+}
+.tips-list li::before { content:'💡'; flex-shrink:0; }
+
+/* Missions */
+.missions-list { display:flex; flex-direction:column; gap:8px; margin-bottom:60px; }
+.mission {
+  display:flex; align-items:center; gap:16px;
+  background:var(--g-surface,rgba(255,255,255,.03));
+  border:1px solid var(--g-border,rgba(255,255,255,.07));
+  border-radius:10px; padding:14px 20px;
+  transition:all .2s;
+}
+.mission:hover { border-color:var(--g-accent); padding-left:24px; }
+.mission-num { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--g-accent); width:32px; flex-shrink:0; }
+.mission-info { flex:1; }
+.mission-name { font-size:14px; font-weight:700; color:var(--g-primary); }
+.mission-desc { font-size:12px; color:color-mix(in srgb,var(--g-primary) 45%,transparent); margin-top:2px; }
+.mission-tag { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--g-accent); background:var(--g-glow,rgba(255,255,255,.05)); padding:3px 8px; border-radius:4px; flex-shrink:0; }
+
+/* bottom padding */
+.game-content-inner { padding-bottom: 80px; }
+
+/* Responsive */
+@media(max-width:768px) {
+  .land-nav { padding:16px 24px; }
+  .land-nav-links { display:none; }
+  .land-section { padding:60px 24px; }
+  .game-preview-grid { grid-template-columns:repeat(3,1fr); }
+  .cat-grid { grid-template-columns:1fr 1fr; }
+  .promo-banner { margin:0 24px 60px; flex-direction:column; }
+  .land-footer { flex-direction:column; gap:12px; text-align:center; }
+  .games-nav { padding:0 20px; overflow-x:auto; }
+  .game-hero { padding:60px 24px 40px; }
+  .game-section { padding:40px 24px 0; }
+  .steam-promo { margin:0 24px 40px; flex-direction:column; }
+  .info-cards { grid-template-columns:1fr; }
+  .auth-card { padding:36px 24px 30px; }
+  .form-grid { grid-template-columns:1fr; }
+  .info-grid { grid-template-columns:1fr; }
+  .confirm-actions { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════
+     THEME BAR (Auth only)
+══════════════════════════════════════════════════════════════ -->
+<div class="theme-bar hidden" id="theme-bar">
+  <span class="theme-label">Tema</span>
+  <button class="theme-btn active" data-theme="classic" title="Clássico"></button>
+  <button class="theme-btn" data-theme="dark" title="Escuro"></button>
+  <button class="theme-btn" data-theme="beige" title="Bege"></button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 1 — LANDING PAGE
+══════════════════════════════════════════════════════════════ -->
+<div id="screen-landing" class="screen active">
+
+  <!-- Nav -->
+  <nav class="land-nav">
+    <div class="land-logo">KRAMA</div>
+    <div class="land-nav-links">
+      <a href="#features">Categorias</a>
+      <a href="#games">Jogos</a>
+      <a href="#promo">Promoções</a>
+    </div>
+    <div class="land-nav-btns">
+      <button class="land-btn land-btn-ghost" onclick="goToAuth('login')">Entrar</button>
+      <button class="land-btn land-btn-red"   onclick="goToAuth('register')">Criar Conta</button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="land-hero">
+    <div class="hero-glow"></div>
+    <div class="hero-eyebrow">🎮 A plataforma gamer definitiva</div>
+    <h1 class="hero-title"><span>KRAMA</span></h1>
+    <p class="hero-tagline">
+      Seu universo completo de <strong>jogos, consoles, PCs e periféricos</strong>.
+      Informações, análises, guias e as melhores <strong>ofertas em um só lugar</strong>.
+    </p>
+    <div class="hero-cta-row">
+      <button class="hero-cta-primary" onclick="goToAuth('register')">Começar agora — é grátis</button>
+      <button class="hero-cta-secondary" onclick="goToAuth('login')">Já tenho conta</button>
+    </div>
+    <div class="scroll-hint">
+      <div class="scroll-arrow"></div>
+      Explorar
+    </div>
+  </section>
+
+  <!-- Features strip -->
+  <div class="land-features" id="features">
+    <div class="feat-item">
+      <div class="feat-icon">🛒</div>
+      <div>
+        <div class="feat-label">Compra & Venda</div>
+        <div class="feat-desc">Marketplace com games, hardware e mais</div>
+      </div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-icon">📖</div>
+      <div>
+        <div class="feat-label">Guias Completos</div>
+        <div class="feat-desc">Missões, personagens, segredos e dicas</div>
+      </div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-icon">💻</div>
+      <div>
+        <div class="feat-label">PCs & Consoles</div>
+        <div class="feat-desc">Montagem, comparativos e avaliações</div>
+      </div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-icon">🔥</div>
+      <div>
+        <div class="feat-label">Melhores Ofertas</div>
+        <div class="feat-desc">Promoções da Steam e lojas parceiras</div>
+      </div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-icon">🏆</div>
+      <div>
+        <div class="feat-label">Rankings</div>
+        <div class="feat-desc">Top jogos, streamers e competições</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Games in Spotlight -->
+  <div class="land-section" id="games">
+    <div class="section-eyebrow">▶ Em destaque</div>
+    <h2 class="section-title">Jogos com guias completos</h2>
+    <p class="section-sub">Acesse informações profundas, dicas de gameplay e todo o lore dos maiores títulos.</p>
+    <div class="game-preview-grid">
+      <div class="game-prev-card" onclick="goToAuth('login')" style="background:linear-gradient(135deg,#1a2e0d,#2d5016)">
+        <div class="game-prev-bg">⛏️</div>
+        <div class="game-prev-overlay"></div>
+        <div class="game-prev-info"><div class="game-prev-name">Minecraft</div><div class="game-prev-genre">Sandbox / Aventura</div></div>
+      </div>
+      <div class="game-prev-card" onclick="goToAuth('login')" style="background:linear-gradient(135deg,#1a0e05,#3d2008)">
+        <div class="game-prev-bg">🤠</div>
+        <div class="game-prev-overlay"></div>
+        <div class="game-prev-info"><div class="game-prev-name">Red Dead Redemption 2</div><div class="game-prev-genre">Ação / Mundo Aberto</div></div>
+      </div>
+      <div class="game-prev-card" onclick="goToAuth('login')" style="background:linear-gradient(135deg,#0a0a14,#1a1a2e)">
+        <div class="game-prev-bg">🪓</div>
+        <div class="game-prev-overlay"></div>
+        <div class="game-prev-info"><div class="game-prev-name">God of War</div><div class="game-prev-genre">Ação / Aventura</div></div>
+      </div>
+      <div class="game-prev-card" onclick="goToAuth('login')" style="background:linear-gradient(135deg,#0d1409,#1c2e10)">
+        <div class="game-prev-bg">🧟</div>
+        <div class="game-prev-overlay"></div>
+        <div class="game-prev-info"><div class="game-prev-name">The Last of Us Part I</div><div class="game-prev-genre">Survival Horror</div></div>
+      </div>
+      <div class="game-prev-card" onclick="goToAuth('login')" style="background:linear-gradient(135deg,#000d1a,#00182e)">
+        <div class="game-prev-bg">🚗</div>
+        <div class="game-prev-overlay"></div>
+        <div class="game-prev-info"><div class="game-prev-name">GTA V</div><div class="game-prev-genre">Ação / Mundo Aberto</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Categories -->
+  <div class="land-section">
+    <div class="section-eyebrow">▶ O que você encontra aqui</div>
+    <h2 class="section-title">Tudo que um gamer precisa</h2>
+    <p class="section-sub">Do jogo ao hardware, da dica ao negócio — a Krama cobre todos os ângulos.</p>
+    <div class="cat-grid">
+      <div class="cat-card" onclick="goToAuth('register')">
+        <div class="cat-icon">🎮</div>
+        <div class="cat-title">Jogos</div>
+        <div class="cat-desc">Guias, histórias, missões, personagens, segredos e rankings dos maiores títulos.</div>
+      </div>
+      <div class="cat-card" onclick="goToAuth('register')">
+        <div class="cat-icon">💻</div>
+        <div class="cat-title">PCs Gamer</div>
+        <div class="cat-desc">PCs montados prontos para jogar, peças avulsas, comparativos de performance e builds recomendadas.</div>
+      </div>
+      <div class="cat-card" onclick="goToAuth('register')">
+        <div class="cat-icon">🕹️</div>
+        <div class="cat-title">Consoles</div>
+        <div class="cat-desc">PS5, Xbox, Switch — análises, acessórios, jogos exclusivos e melhores preços do mercado.</div>
+      </div>
+      <div class="cat-card" onclick="goToAuth('register')">
+        <div class="cat-icon">🖱️</div>
+        <div class="cat-title">Periféricos</div>
+        <div class="cat-desc">Mouses, teclados, headsets, controles, monitores e cadeiras — reviews e onde comprar mais barato.</div>
+      </div>
+      <div class="cat-card" onclick="goToAuth('register')">
+        <div class="cat-icon">🔥</div>
+        <div class="cat-title">Promoções</div>
+        <div class="cat-desc">Alertas de desconto, steam sales, bundles e cupons atualiza dos em tempo real.</div>
+      </div>
+      <div class="cat-card" onclick="goToAuth('register')">
+        <div class="cat-icon">📊</div>
+        <div class="cat-title">Notícias</div>
+        <div class="cat-desc">Lançamentos, patches, trailers, events e tudo que acontece no mundo dos games.</div>
+      </div>
+      <div class="cat-card" onclick="goToAuth('register')">
+        <div class="cat-icon">🏪</div>
+        <div class="cat-title">Marketplace</div>
+        <div class="cat-desc">Compre e venda contas, itens, keys e hardware diretamente com outros jogadores.</div>
+      </div>
+      <div class="cat-card" onclick="goToAuth('register')">
+        <div class="cat-icon">👥</div>
+        <div class="cat-title">Comunidade</div>
+        <div class="cat-desc">Fóruns, grupos por game, encontre parceiros de squad e compartilhe suas conquistas.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Promo banner -->
+  <div class="promo-banner" id="promo">
+    <div class="promo-text">
+      <div class="promo-label">🔥 Steam Sale — Ativa agora</div>
+      <div class="promo-title">Ofertas com até 90% OFF</div>
+      <div class="promo-desc">Acompanhe as melhores promoções da Steam, Nuuvem, Epic e muito mais — tudo num só painel dentro da Krama.</div>
+    </div>
+    <div class="promo-tag">💸</div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="land-footer">
+    <div class="footer-logo">KRAMA</div>
+    <div>© 2025 Krama Gaming Platform — Todos os direitos reservados</div>
+    <div>Feito com ❤️ para gamers</div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 2 — AUTH (Cadastro / Login)
+══════════════════════════════════════════════════════════════ -->
+<div id="screen-auth" class="screen theme-classic">
+  <div class="auth-bg-deco"></div>
+  <button class="back-btn" onclick="goToLanding()">← Krama</button>
+
+  <div class="auth-card">
+    <!-- Logo -->
+    <div class="card-logo">Krama Gaming</div>
+
+    <!-- Tabs -->
+    <div class="tab-row">
+      <button class="tab-btn active" id="tab-register">Cadastrar</button>
+      <button class="tab-btn" id="tab-login">Entrar</button>
+    </div>
+
+    <!-- ── CADASTRO ── -->
+    <div id="panel-register">
+      <div class="card-title">Criar Conta</div>
+      <div class="card-sub">Preencha os dados para se cadastrar na Krama.</div>
+
+      <div id="register-form-wrap">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="r-nome">Nome</label>
+            <input type="text" id="r-nome" placeholder="Seu nome" />
+          </div>
+          <div class="form-group">
+            <label for="r-sob">Sobrenome</label>
+            <input type="text" id="r-sob" placeholder="Seu sobrenome" />
+          </div>
+          <div class="form-group">
+            <label for="r-idade">Idade</label>
+            <input type="number" id="r-idade" placeholder="Ex: 20" min="0" max="120" />
+          </div>
+          <div class="form-group">
+            <label for="r-nasc">Data de Nascimento</label>
+            <input type="date" id="r-nasc" />
+          </div>
+          <div class="form-group full">
+            <label for="r-email">Gmail</label>
+            <input type="email" id="r-email" placeholder="seunome@gmail.com" />
+          </div>
+          <div class="form-group full">
+            <label for="r-tel">Telefone</label>
+            <input type="tel" id="r-tel" placeholder="(00) 00000-0000" />
+          </div>
+          <div class="form-group full">
+            <label for="r-cpf">CPF</label>
+            <input type="text" id="r-cpf" placeholder="000.000.000-00" maxlength="14" />
+          </div>
+          <div class="form-group full">
+            <label for="r-senha">Senha</label>
+            <input type="password" id="r-senha" placeholder="Crie uma senha segura" />
+          </div>
+        </div>
+
+        <!-- Guardian box -->
+        <div id="guardian-box" class="guardian-box" style="margin-top:16px;">
+          <div class="guardian-title">Dados do Responsável Legal</div>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label for="g-email">Gmail do Responsável</label>
+              <input type="email" id="g-email" placeholder="responsavel@gmail.com" />
+            </div>
+            <div class="form-group full">
+              <label for="g-tel">Telefone do Responsável</label>
+              <input type="tel" id="g-tel" placeholder="(00) 00000-0000" />
+            </div>
+          </div>
+        </div>
+
+        <button class="btn" id="btn-register">Criar minha conta →</button>
+        <div class="link-row">Já tem conta? <a href="#" id="go-login">Entrar</a></div>
+      </div>
+
+      <!-- Confirm screen -->
+      <div class="confirm-screen" id="confirm-screen">
+        <div class="confirm-title">Revise seus dados</div>
+        <div class="confirm-sub">Verifique se tudo está correto antes de prosseguir.</div>
+        <div class="info-grid" id="info-grid"></div>
+        <div class="confirm-actions">
+          <button class="btn btn-outline" id="btn-edit">✏ Editar dados</button>
+          <button class="btn" id="btn-confirm">Tudo certo! →</button>
+        </div>
+      </div>
+
+      <!-- Success screen -->
+      <div class="success-screen" id="success-screen">
+        <div class="success-icon">✓</div>
+        <div class="success-title">Cadastro realizado!</div>
+        <div class="success-sub">Bem-vindo à Krama! Sua conta foi criada com sucesso.</div>
+        <button class="btn" id="btn-go-site">Explorar a Krama →</button>
+        <button class="btn btn-outline" id="btn-go-login-after">Fazer login</button>
+      </div>
+    </div>
+
+    <!-- ── LOGIN ── -->
+    <div id="panel-login" style="display:none;">
+      <div class="card-title">Bem-vindo de volta</div>
+      <div class="card-sub">Entre na sua conta Krama.</div>
+      <div class="form-grid" style="grid-template-columns:1fr;">
+        <div class="form-group">
+          <label for="l-user">Gmail ou Nome de Usuário</label>
+          <input type="text" id="l-user" placeholder="seunome@gmail.com ou @usuario" />
+        </div>
+        <div class="form-group">
+          <label for="l-senha">Senha</label>
+          <input type="password" id="l-senha" placeholder="Sua senha" />
+        </div>
+      </div>
+      <div style="text-align:right;margin-top:8px;">
+        <a href="#" style="font-size:12px;color:var(--accent);text-decoration:none;font-weight:500;">Esqueci minha senha</a>
+      </div>
+      <button class="btn" id="btn-login" style="margin-top:20px;">Entrar na Krama →</button>
+      <div class="link-row">Não tem conta? <a href="#" id="go-register">Criar conta</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCREEN 3 — GAMES HUB
+══════════════════════════════════════════════════════════════ -->
+<div id="screen-games" class="screen game-rdr">
+
+  <!-- Nav -->
+  <nav class="games-nav">
+    <div class="games-logo">KRAMA</div>
+    <div class="games-nav-tabs">
+      <button class="game-tab active" data-game="rdr">Red Dead 2</button>
+      <button class="game-tab" data-game="mc">Minecraft</button>
+      <button class="game-tab" data-game="gow">God of War</button>
+      <button class="game-tab" data-game="tlou">The Last of Us</button>
+      <button class="game-tab" data-game="gta">GTA V</button>
+    </div>
+    <div class="games-user-bar">
+      <span class="games-user-name" id="games-username">Jogador</span>
+      <button class="games-logout" onclick="goToLanding()">Sair</button>
+    </div>
+  </nav>
+
+  <!-- ── RDR2 ── -->
+  <div class="game-content active" id="content-rdr">
+    <div class="game-content-inner">
+      <div class="game-hero">
+        <div class="game-hero-bg"><div class="game-hero-glow"></div></div>
+        <div class="game-platform-badge">🤠 Rockstar Games · 2018</div>
+        <div class="game-hero-title">Red Dead Redemption 2</div>
+        <div class="game-hero-desc">Uma épica história de honra e lealdade no coração do América selvagem. Acompanhe Arthur Morgan e a gangue Van der Linde num dos jogos mais imersivos já criados.</div>
+        <div class="game-meta-row">
+          <div class="game-meta"><div class="game-meta-label">Plataforma</div><div class="game-meta-val">PS4 / Xbox / PC</div></div>
+          <div class="game-meta"><div class="game-meta-label">Gênero</div><div class="game-meta-val">Ação / Mundo Aberto</div></div>
+          <div class="game-meta"><div class="game-meta-label">Nota Metacritic</div><div class="game-meta-val">97/100</div></div>
+          <div class="game-meta"><div class="game-meta-label">Duração média</div><div class="game-meta-val">~60h história</div></div>
+        </div>
+      </div>
+
+      <!-- Steam Promo -->
+      <div class="steam-promo" style="margin-top:40px;">
+        <div class="steam-promo-info">
+          <div class="steam-label">🎮 Steam</div>
+          <div class="steam-title">Red Dead Redemption 2 — Oferta</div>
+          <div class="steam-price-old">R$ 179,99</div>
+          <div class="steam-price-new">R$ 53,99 <span class="steam-discount">-70%</span></div>
+        </div>
+        <button class="steam-btn" onclick="alert('Abre Steam: store.steampowered.com')">Ver na Steam →</button>
+      </div>
+
+      <!-- Characters -->
+      <div class="game-section">
+        <div class="game-section-title">Personagens Principais</div>
+        <div class="chars-grid">
+          <div class="char-card"><div class="char-emoji">🤠</div><div class="char-name">Arthur Morgan</div><div class="char-role">Protagonista</div><div class="char-desc">Foragido leal à gangue, com um passado complexo e uma jornada de redenção.</div></div>
+          <div class="char-card"><div class="char-emoji">👴</div><div class="char-name">Dutch van der Linde</div><div class="char-role">Líder da gangue</div><div class="char-desc">Visionário carismático cujos ideais começam a rachar sob pressão.</div></div>
+          <div class="char-card"><div class="char-emoji">🔫</div><div class="char-name">John Marston</div><div class="char-role">Membro da gangue</div><div class="char-desc">Pai de família tentando sair da vida criminosa — protagonista do RDR1.</div></div>
+          <div class="char-card"><div class="char-emoji">🎩</div><div class="char-name">Micah Bell</div><div class="char-role">Antagonista</div><div class="char-desc">Brutal e sem escrúpulos, sua traição define o destino da gangue.</div></div>
+          <div class="char-card"><div class="char-emoji">💄</div><div class="char-name">Sadie Adler</div><div class="char-role">Aliada</div><div class="char-desc">Viúva que se torna uma das figuras mais formidáveis do Oeste.</div></div>
+          <div class="char-card"><div class="char-emoji">🧓</div><div class="char-name">Hosea Matthews</div><div class="char-role">Mentor</div><div class="char-desc">Golpista experiente e figura paterna para Arthur e Dutch.</div></div>
+        </div>
+      </div>
+
+      <!-- Missions -->
+      <div class="game-section">
+        <div class="game-section-title">Missões Principais (Seleção)</div>
+        <div class="missions-list">
+          <div class="mission"><div class="mission-num">01</div><div class="mission-info"><div class="mission-name">Fuga das Montanhas Colter</div><div class="mission-desc">A gangue foge de uma tempestade de neve enquanto agentes Pinkerton fecham o cerco.</div></div><div class="mission-tag">Capítulo 1</div></div>
+          <div class="mission"><div class="mission-num">02</div><div class="mission-info"><div class="mission-name">O assalto ao trem</div><div class="mission-desc">Emboscada a um trem dos Grays — ação e consequências imprevistas.</div></div><div class="mission-tag">Capítulo 2</div></div>
+          <div class="mission"><div class="mission-num">03</div><div class="mission-info"><div class="mission-name">A guerra dos clãs</div><div class="mission-desc">Tensão entre as famílias Gray e Braithwaite chega ao ponto de ruptura.</div></div><div class="mission-tag">Capítulo 3</div></div>
+          <div class="mission"><div class="mission-num">04</div><div class="mission-info"><div class="mission-name">O assalto ao banco de Saint Denis</div><div class="mission-desc">O grande golpe da gangue — tudo que pode dar errado, dá.</div></div><div class="mission-tag">Capítulo 4</div></div>
+          <div class="mission"><div class="mission-num">05</div><div class="mission-info"><div class="mission-name">A escolha de Arthur</div><div class="mission-desc">O momento mais emotivo do jogo — honra alta ou baixa muda o desfecho.</div></div><div class="mission-tag">Capítulo 6</div></div>
+        </div>
+      </div>
+
+      <!-- Tips -->
+      <div class="game-section">
+        <div class="game-section-title">Dicas Essenciais</div>
+        <ul class="tips-list">
+          <li>Mantenha seu nível de honra alto — isso desbloqueia o melhor final e descontos em lojas.</li>
+          <li>Alimente Arthur regularmente para manter os atributos de saúde, stamina e deadeye no máximo.</li>
+          <li>Venda peles no açougue antes de dormir — elas somem se Arthur morrer.</li>
+          <li>Use o modo Deadeye (RB/R1 segurado) para abater múltiplos inimigos com precisão.</li>
+          <li>Explore os acampamentos de outros foragidos no mapa — rendem itens raros e dinheiro fácil.</li>
+          <li>Caçe animais lendários para craftar equipamentos únicos com o trapper.</li>
+        </ul>
+      </div>
+
+      <!-- Legendary Animals -->
+      <div class="game-section">
+        <div class="game-section-title">Animais Lendários</div>
+        <div class="info-cards">
+          <div class="info-card"><div class="info-card-icon">🐻</div><div class="info-card-title">Urso Grizzly Lendário</div><div class="info-card-text">North of O'Creagh's Run, Grizzlies East. Pele usada para fazer chapéu lendário de urso no Trapper.</div></div>
+          <div class="info-card"><div class="info-card-icon">🦌</div><div class="info-card-title">Cervo Branco Lendário</div><div class="info-card-text">West Grizzlies, perto de Cattail Pond. Um dos animais mais cobiçados do jogo.</div></div>
+          <div class="info-card"><div class="info-card-icon">🐊</div><div class="info-card-title">Jacaré Lendário</div><div class="info-card-text">Bayou Nwa (Lemoyne). Use isco de peixe para atraí-lo e carabina de alta potência.</div></div>
+          <div class="info-card"><div class="info-card-icon">🦁</div><div class="info-card-title">Puma da Montanha Lendário</div><div class="info-card-text">Big Valley (West Elizabeth). Embosca pela vegetação — fique atento ao barulho.</div></div>
+        </div>
+      </div>
+
+      <!-- Pistoleiros -->
+      <div class="game-section">
+        <div class="game-section-title">Pistoleiros Lendários</div>
+        <div class="info-cards">
+          <div class="info-card"><div class="info-card-icon">🎯</div><div class="info-card-title">Black Belle</div><div class="info-card-text">Bayou Nwa. Única pistoleira que sobrevive ao duelo. Conversa e vai embora se Arthur for honrado.</div></div>
+          <div class="info-card"><div class="info-card-icon">🤺</div><div class="info-card-title">Flaco Hernandez</div><div class="info-card-text">Cairn Lake (Grizzlies). Derrote-o num duelo no acampamento dele no inverno.</div></div>
+          <div class="info-card"><div class="info-card-icon">🔩</div><div class="info-card-title">Emmet Granger</div><div class="info-card-text">Flat Iron Lake. Trabalha numa fazenda de porcos — espere ele ir ao banheiro antes de duelar.</div></div>
+          <div class="info-card"><div class="info-card-icon">💰</div><div class="info-card-title">Billy Midnight</div><div class="info-card-text">Trem entre Lemoyne e Roanoke. Confronte-o no telhado do vagão.</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── MINECRAFT ── -->
+  <div class="game-content" id="content-mc">
+    <div class="game-content-inner">
+      <div class="game-hero">
+        <div class="game-hero-bg"><div class="game-hero-glow"></div></div>
+        <div class="game-platform-badge">⛏️ Mojang · 2011</div>
+        <div class="game-hero-title">Minecraft</div>
+        <div class="game-hero-desc">O jogo de sobrevivência e criação mais vendido da história. Construa, explore, mine e sobreviva num mundo infinito de blocos cheio de possibilidades.</div>
+        <div class="game-meta-row">
+          <div class="game-meta"><div class="game-meta-label">Plataforma</div><div class="game-meta-val">Todas as plataformas</div></div>
+          <div class="game-meta"><div class="game-meta-label">Modo</div><div class="game-meta-val">Solo / Multiplayer</div></div>
+          <div class="game-meta"><div class="game-meta-label">Cópias vendidas</div><div class="game-meta-val">+300 milhões</div></div>
+          <div class="game-meta"><div class="game-meta-label">Versão atual</div><div class="game-meta-val">Java 1.21 / Bedrock</div></div>
+        </div>
+      </div>
+
+      <div class="steam-promo" style="margin-top:40px;">
+        <div class="steam-promo-info">
+          <div class="steam-label">🛍️ Minecraft.net</div>
+          <div class="steam-title">Minecraft Java + Bedrock Edition</div>
+          <div class="steam-price-old">R$ 139,90</div>
+          <div class="steam-price-new">R$ 99,90 <span class="steam-discount">-29%</span></div>
+        </div>
+        <button class="steam-btn" onclick="alert('Abre: minecraft.net/pt-br/store')">Comprar agora →</button>
+      </div>
+
+      <div class="game-section">
+        <div class="game-section-title">Como Começar — Primeiros dias</div>
+        <div class="missions-list">
+          <div class="mission"><div class="mission-num">01</div><div class="mission-info"><div class="mission-name">Corte árvores imediatamente</div><div class="mission-desc">Madeira é o recurso base para tudo. Quebre troncos com a mão mesmo.</div></div><div class="mission-tag">Dia 1</div></div>
+          <div class="mission"><div class="mission-num">02</div><div class="mission-info"><div class="mission-name">Faça uma bancada de trabalho</div><div class="mission-desc">4 blocos de madeira → bancada → portal para todos os outros itens.</div></div><div class="mission-tag">Dia 1</div></div>
+          <div class="mission"><div class="mission-num">03</div><div class="mission-info"><div class="mission-name">Mine carvão e pedra</div><div class="mission-desc">Pedra = ferramentas melhores. Carvão = tochas. Nunca mine ferro sem pedra primeiro.</div></div><div class="mission-tag">Dia 1–2</div></div>
+          <div class="mission"><div class="mission-num">04</div><div class="mission-info"><div class="mission-name">Construa um abrigo antes das 19h</div><div class="mission-desc">Monstros spawnam no escuro. Uma caixa de terra já é suficiente na primeira noite.</div></div><div class="mission-tag">Dia 1</div></div>
+          <div class="mission"><div class="mission-num">05</div><div class="mission-info"><div class="mission-name">Vá ao Nether</div><div class="mission-desc">Junte obsidiana (10 blocos) e flint & steel para abrir o portal.</div></div><div class="mission-tag">Mid Game</div></div>
+          <div class="mission"><div class="mission-num">06</div><div class="mission-info"><div class="mission-name">Derrote o Ender Dragon</div><div class="mission-desc">O objetivo final: encontre a fortaleza, ative o portal do End e enfrente o dragão.</div></div><div class="mission-tag">End Game</div></div>
+        </div>
+      </div>
+
+      <div class="game-section">
+        <div class="game-section-title">Melhores Itens do Jogo</div>
+        <div class="info-cards">
+          <div class="info-card"><div class="info-card-icon">💎</div><div class="info-card-title">Espada de Netherite</div><div class="info-card-text">O item de combate mais poderoso. Upgrade: Espada de Diamante + Ancient Debris derretido.</div></div>
+          <div class="info-card"><div class="info-card-icon">🏹</div><div class="info-card-title">Arco com Power V + Infinity</div><div class="info-card-text">Dano máximo à distância. Infinity = nunca acaba a flecha (1 flecha na mochila é suficiente).</div></div>
+          <div class="info-card"><div class="info-card-icon">🔱</div><div class="info-card-title">Tridente com Riptide</div><div class="info-card-text">Te lança como foguete na chuva ou na água. Mobilidade perfeita + dano enorme.</div></div>
+          <div class="info-card"><div class="info-card-icon">🥾</div><div class="info-card-title">Botas com Depth Strider + Feather Falling</div><div class="info-card-text">Depth Strider: velocidade embaixo d'água. Feather Falling IV: sobrevive quedas extremas.</div></div>
+          <div class="info-card"><div class="info-card-icon">🪄</div><div class="info-card-title">Elytra</div><div class="info-card-text">Asas que permitem voar. Encontrada nos End Ships após derrotar o Dragão. Use com Rockets.</div></div>
+          <div class="info-card"><div class="info-card-icon">⛏️</div><div class="info-card-title">Picareta de Netherite + Fortune III</div><div class="info-card-text">Fortune III triplica a chance de diamantes, esmeraldas e outros minérios raros.</div></div>
+        </div>
+      </div>
+
+      <div class="game-section">
+        <div class="game-section-title">Dicas Avançadas</div>
+        <ul class="tips-list">
+          <li>Nunca mine direto para baixo — você pode cair em lava ou cavernas profundas.</li>
+          <li>Diamantes são encontrados no nível Y=-58 na versão 1.18+. Use F3 para ver sua altitude.</li>
+          <li>Aldeias têm bibliotecas com estantes — use-as para fazer encantamentos poderosos.</li>
+          <li>Ancient Debris (para Netherite) aparece entre Y=8 e Y=22 no Nether. Mine horizontalmente.</li>
+          <li>Crie uma fazenda de iron golems perto de uma aldeia para ter ferro infinito.</li>
+          <li>Conecte blocos de mel e cobre para criar "condutores" que afastam mobs hostis na chuva.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── GOD OF WAR ── -->
+  <div class="game-content" id="content-gow">
+    <div class="game-content-inner">
+      <div class="game-hero">
+        <div class="game-hero-bg"><div class="game-hero-glow"></div></div>
+        <div class="game-platform-badge">🪓 Santa Monica Studio · PS4/PC · 2018</div>
+        <div class="game-hero-title">God of War</div>
+        <div class="game-hero-desc">Kratos e seu filho Atreus embarcam numa jornada épica pela mitologia nórdica. Uma história de pai e filho que redefiniu o gênero de ação.</div>
+        <div class="game-meta-row">
+          <div class="game-meta"><div class="game-meta-label">Plataforma</div><div class="game-meta-val">PS4 / PS5 / PC</div></div>
+          <div class="game-meta"><div class="game-meta-label">Duração</div><div class="game-meta-val">~25h história</div></div>
+          <div class="game-meta"><div class="game-meta-label">Nota Metacritic</div><div class="game-meta-val">94/100</div></div>
+          <div class="game-meta"><div class="game-meta-label">Câmera</div><div class="game-meta-val">One Take (sem corte)</div></div>
+        </div>
+      </div>
+
+      <div class="steam-promo" style="margin-top:40px;">
+        <div class="steam-promo-info">
+          <div class="steam-label">🎮 Steam</div>
+          <div class="steam-title">God of War — PC Edition</div>
+          <div class="steam-price-old">R$ 149,99</div>
+          <div class="steam-price-new">R$ 59,99 <span class="steam-discount">-60%</span></div>
+        </div>
+        <button class="steam-btn" onclick="alert('Abre Steam: store.steampowered.com')">Ver na Steam →</button>
+      </div>
+
+      <div class="game-section">
+        <div class="game-section-title">Personagens</div>
+        <div class="chars-grid">
+          <div class="char-card"><div class="char-emoji">⚔️</div><div class="char-name">Kratos</div><div class="char-role">Protagonista</div><div class="char-desc">Ex-Deus da Guerra grego agora exilado nos reinos nórdicos, tentando ser um pai melhor.</div></div>
+          <div class="char-card"><div class="char-emoji">🏹</div><div class="char-name">Atreus</div><div class="char-role">Filho / Parceiro</div><div class="char-desc">Filho de Kratos com poderes divinos que ele mesmo ainda não compreende. IA que realmente ajuda em combate.</div></div>
+          <div class="char-card"><div class="char-emoji">🐍</div><div class="char-name">Jörmungandr</div><div class="char-role">A Serpente do Mundo</div><div class="char-desc">A gigantesca Serpente do Mundo que, surpreendentemente, é aliada de Kratos e Atreus.</div></div>
+          <div class="char-card"><div class="char-emoji">❄️</div><div class="char-name">Freya</div><div class="char-role">Aliada / Antagonista</div><div class="char-desc">Rainha dos Vanir, feiticeira poderosa que começa como aliada mas tem motivações próprias.</div></div>
+          <div class="char-card"><div class="char-emoji">⚡</div><div class="char-name">Baldur</div><div class="char-role">Antagonista</div><div class="char-desc">Filho de Odin, imune à dor — o que o tornou inconsequente e violento ao longo dos séculos.</div></div>
+          <div class="char-card"><div class="char-emoji">🔨</div><div class="char-name">Brok & Sindri</div><div class="char-role">Ferreiros Anões</div><div class="char-desc">Os criadores do Leviathan Axe. Upgreiam suas armas e armaduras ao longo do jogo.</div></div>
+        </div>
+      </div>
+
+      <div class="game-section">
+        <div class="game-section-title">Dicas de Combate</div>
+        <ul class="tips-list">
+          <li>Chame Atreus (quadrado/Y) antes de atacar — ele distrai inimigos, abrindo brechas para combos.</li>
+          <li>O Leviathan Axe arremessado e evocado de volta causa dano duplo — use sempre em inimigos agrupados.</li>
+          <li>Aparar ataques dourados (parry perfeito com L1 no timing certo) atordoa inimigos grandes.</li>
+          <li>Invista primeiro em Runas de habilidade — elas são mais impactantes que upgrades de arma no início.</li>
+          <li>Explore todos os portais de Niflheim e Muspelheim para as melhores armaduras do jogo.</li>
+          <li>As Valquírias são os desafios opcionais mais difíceis — enfrente-as apenas com armadura nível 6+.</li>
+        </ul>
+      </div>
+
+      <div class="game-section">
+        <div class="game-section-title">Reinos Exploráveis</div>
+        <div class="info-cards">
+          <div class="info-card"><div class="info-card-icon">🌊</div><div class="info-card-title">Midgard</div><div class="info-card-text">Reino humano central. O Lago dos Nove conecta todos os outros. Rico em segredos e tesouros.</div></div>
+          <div class="info-card"><div class="info-card-icon">🌑</div><div class="info-card-title">Alfheim</div><div class="info-card-text">Reino dos Elfos. A Luz de Alfheim é essencial para a progressão da história.</div></div>
+          <div class="info-card"><div class="info-card-icon">🔥</div><div class="info-card-title">Muspelheim</div><div class="info-card-text">Reino do fogo. Arena de desafios para melhores armaduras. Chaves escondidas no mapa.</div></div>
+          <div class="info-card"><div class="info-card-icon">🌫️</div><div class="info-card-title">Niflheim</div><div class="info-card-text">Labirinto que muda a cada visita. Melhor fonte de recursos raros para armadura de Ivaldi.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── THE LAST OF US ── -->
+  <div class="game-content" id="content-tlou">
+    <div class="game-content-inner">
+      <div class="game-hero">
+        <div class="game-hero-bg"><div class="game-hero-glow"></div></div>
+        <div class="game-platform-badge">🧟 Naughty Dog · PS5/PC · 2023 Remake</div>
+        <div class="game-hero-title">The Last of Us Part I</div>
+        <div class="game-hero-desc">Joel e Ellie atravessam um Estados Unidos devastado por um fungo parasita que transforma humanos em criaturas violentas. Uma história sobre amor, perda e o que fazemos para proteger quem amamos.</div>
+        <div class="game-meta-row">
+          <div class="game-meta"><div class="game-meta-label">Plataforma</div><div class="game-meta-val">PS5 / PS4 / PC</div></div>
+          <div class="game-meta"><div class="game-meta-label">Duração</div><div class="game-meta-val">~16h história</div></div>
+          <div class="game-meta"><div class="game-meta-label">Nota Metacritic</div><div class="game-meta-val">96/100</div></div>
+          <div class="game-meta"><div class="game-meta-label">Tipo</div><div class="game-meta-val">Survival Horror / Drama</div></div>
+        </div>
+      </div>
+
+      <div class="steam-promo" style="margin-top:40px;">
+        <div class="steam-promo-info">
+          <div class="steam-label">🎮 Steam</div>
+          <div class="steam-title">The Last of Us Part I — PC</div>
+          <div class="steam-price-old">R$ 249,99</div>
+          <div class="steam-price-new">R$ 124,99 <span class="steam-discount">-50%</span></div>
+        </div>
+        <button class="steam-btn" onclick="alert('Abre Steam: store.steampowered.com')">Ver na Steam →</button>
+      </div>
+
+      <div class="game-section">
+        <div class="game-section-title">Personagens Principais</div>
+        <div class="chars-grid">
+          <div class="char-card"><div class="char-emoji">🧔</div><div class="char-name">Joel Miller</div><div class="char-role">Protagonista</div><div class="char-desc">Contrabandista endurecido por perdas. Começa como escolta de Ellie, termina como figura paterna.</div></div>
+          <div class="char-card"><div class="char-emoji">👧</div><div class="char-name">Ellie Williams</div><div class="char-role">Protagonista</div><div class="char-desc">Imune ao fungo Cordyceps. Sarcástica, corajosa e a esperança da humanidade.</div></div>
+          <div class="char-card"><div class="char-emoji">👩</div><div class="char-name">Tess</div><div class="char-role">Parceira de Joel</div><div class="char-desc">Contrabandista e aliada de Joel. Seu sacrifício inicia toda a jornada.</div></div>
+          <div class="char-card"><div class="char-emoji">🌻</div><div class="char-name">Marlene</div><div class="char-role">Líder das Vagalumes</div><div class="char-desc">Líder do grupo rebelde. Conhece o segredo de Ellie e carrega um fardo enorme.</div></div>
+          <div class="char-card"><div class="char-emoji">🎸</div><div class="char-name">Tommy Miller</div><div class="char-role">Irmão de Joel</div><div class="char-desc">Vive numa comunidade protegida em Wyoming. Ex-vagalume que encontrou paz.</div></div>
+        </div>
+      </div>
+
+      <div class="game-section">
+        <div class="game-section-title">Tipos de Infectados</div>
+        <div class="info-cards">
+          <div class="info-card"><div class="info-card-icon">😵</div><div class="info-card-title">Runner</div><div class="info-card-text">Estágio inicial. Ainda tem visão. Corre em direção a sons. Mate em silêncio ou fuja.</div></div>
+          <div class="info-card"><div class="info-card-icon">👁️</div><div class="info-card-title">Stalker</div><div class="info-card-text">Parcialmente cego. Mas escuta tudo. Tende a se esconder e emboscar. O mais imprevisível.</div></div>
+          <div class="info-card"><div class="info-card-icon">🍄</div><div class="info-card-title">Clicker</div><div class="info-card-text">Completamente cego. Usa ecolocalização. Mata em 1 mordida. Evite sons — use tijolo para distrair.</div></div>
+          <div class="info-card"><div class="info-card-icon">💀</div><div class="info-card-title">Bloater</div><div class="info-card-text">Estágio final. Enorme e blindado. Atira pacotes de esporos. Molotov é a melhor arma.</div></div>
+        </div>
+      </div>
+
+      <div class="game-section">
+        <div class="game-section-title">Dicas de Sobrevivência</div>
+        <ul class="tips-list">
+          <li>Crafting em movimento funciona — monte kits médicos e bombas de prego mesmo fugindo.</li>
+          <li>Clickers morrem com uma tesoura no modo furtivo — economize munição valiosa.</li>
+          <li>Use tijolos e garrafas para criar distração e redirecionar inimigos — não desperdice.</li>
+          <li>O modo de escuta (L2 segurado) revela inimigos através das paredes — use sempre.</li>
+          <li>Colete todos os suprimentos mesmo que esteja bem — você precisará deles mais à frente.</li>
+          <li>Em combate aberto, sempre priorize atiradores e inimigos com escudo primeiro.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── GTA V ── -->
+  <div class="game-content" id="content-gta">
+    <div class="game-content-inner">
+      <div class="game-hero">
+        <div class="game-hero-bg"><div class="game-hero-glow"></div></div>
+        <div class="game-platform-badge">🚗 Rockstar Games · 2013 — Ainda vivo!</div>
+        <div class="game-hero-title">Grand Theft Auto V</div>
+        <div class="game-hero-desc">Três criminosos de personalidades radicalmente diferentes se unem para planejar e executar os maiores heists de Los Santos. O jogo mais lucrativo da história dos entretenimentos.</div>
+        <div class="game-meta-row">
+          <div class="game-meta"><div class="game-meta-label">Plataforma</div><div class="game-meta-val">PS4/5 / Xbox / PC</div></div>
+          <div class="game-meta"><div class="game-meta-label">Modo</div><div class="game-meta-val">Story + Online</div></div>
+          <div class="game-meta"><div class="game-meta-val">+185 milhões</div><div class="game-meta-label">Cópias vendidas</div></div>
+          <div class="game-meta"><div class="game-meta-label">Nota Metacritic</div><div class="game-meta-val">97/100</div></div>
+        </div>
+      </div>
+
+      <div class="steam-promo" style="margin-top:40px;">
+        <div class="steam-promo-info">
+          <div class="steam-label">🎮 Steam</div>
+          <div class="steam-title">Grand Theft Auto V — Premium Edition</div>
+          <div class="steam-price-old">R$ 99,99</div>
+          <div class="steam-price-new">R$ 29,99 <span class="steam-discount">-70%</span></div>
+        </div>
+        <button class="steam-btn" onclick="alert('Abre Steam: store.steampowered.com')">Ver na Steam →</button>
+      </div>
+
+      <div class="game-section">
+        <div class="game-section-title">Protagonistas</div>
+        <div class="chars-grid">
+          <div class="char-card"><div class="char-emoji">💼</div><div class="char-name">Michael De Santa</div><div class="char-role">Protagonista</div><div class="char-desc">Ex-criminoso em proteção do governo. Rico, entediado e em crise existencial constante.</div></div>
+          <div class="char-card"><div class="char-emoji">😡</div><div class="char-name">Trevor Philips</div><div class="char-role">Protagonista</div><div class="char-desc">Psicopata imprevisível, ex-parceiro de Michael. Vive no deserto de Sandy Shores sem regras.</div></div>
+          <div class="char-card"><div class="char-emoji">🏃</div><div class="char-name">Franklin Clinton</div><div class="char-role">Protagonista</div><div class="char-desc">Jovem dos guetos de Los Santos tentando subir na vida através de crimes cada vez maiores.</div></div>
+          <div class="char-card"><div class="char-emoji">🏦</div><div class="char-name">Lester Crest</div><div class="char-role">Estrategista</div><div class="char-desc">Gênio dos crimes. Planeja os heists e hackeia sistemas. Aliado indispensável.</div></div>
+        </div>
+      </div>
+
+      <div class="game-section">
+        <div class="game-section-title">Os Grandes Heists — Story Mode</div>
+        <div class="missions-list">
+          <div class="mission"><div class="mission-num">01</div><div class="mission-info"><div class="mission-name">O Assalto ao Jewel Store</div><div class="mission-desc">Primeiro grande heist. Escolha entre abordagem inteligente (gás) ou violenta (fuzis). Smart rende mais $.</div></div><div class="mission-tag">Ato 1</div></div>
+          <div class="mission"><div class="mission-num">02</div><div class="mission-info"><div class="mission-name">Roubo de Bioagente</div><div class="mission-desc">Fuja do exército dos EUA de moto numa rodovia. Uma das missões mais épicas do jogo.</div></div><div class="mission-tag">Ato 2</div></div>
+          <div class="mission"><div class="mission-num">03</div><div class="mission-info"><div class="mission-name">O Golpe do FIB</div><div class="mission-desc">Invadam o prédio do FBI disfarçados de agentes. Coordenação perfeita entre os 3 protagonistas.</div></div><div class="mission-tag">Ato 2</div></div>
+          <div class="mission"><div class="mission-num">04</div><div class="mission-info"><div class="mission-name">O Grande Assalto ao Banco</div><div class="mission-desc">O heist definitivo. Abordagem conservadora vs. agressiva. Escolha bem a equipe!</div></div><div class="mission-tag">Ato Final</div></div>
+        </div>
+      </div>
+
+      <div class="game-section">
+        <div class="game-section-title">Dicas Essenciais — Story & Online</div>
+        <ul class="tips-list">
+          <li>Invista na bolsa de valores (BAWSAQ e LCN) após missões específicas — alguns personagens sobem 80%+.</li>
+          <li>Compre o hangar em Sandy Shores logo no início — te dá acesso a aviões e helicópteros grátis.</li>
+          <li>No GTA Online, complete o Pacific Standard Heist repetidamente — melhor relação tempo/dinheiro.</li>
+          <li>Use o cheat de invencibilidade (5 min) para missões difíceis: ☎→ 1-999-724-654-5537.</li>
+          <li>Franklin tem habilidade especial de slow motion em carro — use em perseguições sempre.</li>
+          <li>Trevor tem resistência a dano aumentada em seu modo raiva — ideal para missões com muitos inimigos.</li>
+        </ul>
+      </div>
+
+      <div class="game-section">
+        <div class="game-section-title">Atividades & Passatempos</div>
+        <div class="info-cards">
+          <div class="info-card"><div class="info-card-icon">🏎️</div><div class="info-card-title">Corridas de rua</div><div class="info-card-text">Disponíveis no mapa como pontos roxos. Ganhe dinheiro e reputação. Carro Zentorno é o melhor.</div></div>
+          <div class="info-card"><div class="info-card-icon">🎾</div><div class="info-card-title">Tênis & Golfe</div><div class="info-card-text">Michael pode jogar golfe e tênis. Atividades de imersão que rendem troféus.</div></div>
+          <div class="info-card"><div class="info-card-icon">🦈</div><div class="info-card-title">Mergulho Submarino</div><div class="info-card-text">Explore o fundo do oceano de Los Santos. Tem tesouros, partes de submarino e a escultura alienígena.</div></div>
+          <div class="info-card"><div class="info-card-icon">🪂</div><div class="info-card-title">Paraquedismo</div><div class="info-card-text">Missões de salto disponíveis no mapa. Compra de paraquedas na loja de armas = necessário.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end screen-games -->
+
+<!-- ═══════════════════════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════════════════════ -->
+<script>
+/* ── Screen manager ─────────────────────────────────────── */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+
+  // Theme bar only on auth
+  const tb = document.getElementById('theme-bar');
+  if (id === 'auth') {
+    tb.classList.remove('hidden');
+  } else {
+    tb.classList.add('hidden');
+  }
+}
+
+function goToAuth(tab) {
+  showScreen('auth');
+  if (tab === 'login') showAuthPanel('login');
+  else showAuthPanel('register');
+}
+function goToLanding() { showScreen('landing'); }
+function goToGames(username) {
+  document.getElementById('games-username').textContent = username || 'Jogador';
+  showScreen('games');
+}
+
+/* ── AUTH Theme switcher ─────────────────────────────────── */
+const authScreen = document.getElementById('screen-auth');
+document.querySelectorAll('.theme-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    authScreen.className = 'screen theme-' + btn.dataset.theme;
+    document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+/* ── Auth panel switching ────────────────────────────────── */
+const tabRegister = document.getElementById('tab-register');
+const tabLogin    = document.getElementById('tab-login');
+const panelReg    = document.getElementById('panel-register');
+const panelLogin  = document.getElementById('panel-login');
+
+function showAuthPanel(panel) {
+  if (panel === 'register') {
+    panelReg.style.display = 'block';
+    panelLogin.style.display = 'none';
+    tabRegister.classList.add('active');
+    tabLogin.classList.remove('active');
+  } else {
+    panelReg.style.display = 'none';
+    panelLogin.style.display = 'block';
+    tabLogin.classList.add('active');
+    tabRegister.classList.remove('active');
+  }
+}
+
+tabRegister.addEventListener('click', () => showAuthPanel('register'));
+tabLogin.addEventListener('click', () => showAuthPanel('login'));
+document.getElementById('go-login').addEventListener('click', e => { e.preventDefault(); showAuthPanel('login'); });
+document.getElementById('go-register').addEventListener('click', e => { e.preventDefault(); showAuthPanel('register'); });
+
+/* ── CPF mask ────────────────────────────────────────────── */
+document.getElementById('r-cpf').addEventListener('input', function () {
+  let v = this.value.replace(/\D/g,'').slice(0,11);
+  if (v.length > 9)      v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/,'$1.$2.$3-$4');
+  else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{0,3})/,'$1.$2.$3');
+  else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/,'$1.$2');
+  this.value = v;
+});
+
+/* ── Phone mask ──────────────────────────────────────────── */
+function maskPhone(el) {
+  el.addEventListener('input', function () {
+    let v = this.value.replace(/\D/g,'').slice(0,11);
+    if (v.length > 10)     v = v.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
+    else if (v.length > 6) v = v.replace(/(\d{2})(\d{4,5})(\d{0,4})/,'($1) $2-$3');
+    else if (v.length > 2) v = v.replace(/(\d{2})(\d{0,5})/,'($1) $2');
+    else if (v.length > 0) v = '(' + v;
+    this.value = v;
+  });
+}
+maskPhone(document.getElementById('r-tel'));
+maskPhone(document.getElementById('g-tel'));
+
+/* ── Minor detection ─────────────────────────────────────── */
+const idadeInput = document.getElementById('r-idade');
+const nascInput  = document.getElementById('r-nasc');
+const guardianBox = document.getElementById('guardian-box');
+
+function checkMinor() {
+  const idade = parseInt(idadeInput.value) || 0;
+  guardianBox.classList.toggle('show', idade > 0 && idade < 18);
+}
+idadeInput.addEventListener('input', checkMinor);
+nascInput.addEventListener('change', () => {
+  if (nascInput.value) {
+    const dob = new Date(nascInput.value), today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    if (today.getMonth() - dob.getMonth() < 0 || (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) age--;
+    idadeInput.value = age >= 0 ? age : '';
+    checkMinor();
+  }
+});
+
+/* ── Register submit ─────────────────────────────────────── */
+document.getElementById('btn-register').addEventListener('click', () => {
+  const nome  = document.getElementById('r-nome').value.trim();
+  const sob   = document.getElementById('r-sob').value.trim();
+  const idade = document.getElementById('r-idade').value.trim();
+  const nasc  = document.getElementById('r-nasc').value;
+  const email = document.getElementById('r-email').value.trim();
+  const tel   = document.getElementById('r-tel').value.trim();
+  const cpf   = document.getElementById('r-cpf').value.trim();
+
+  if (!nome || !sob || !idade || !nasc || !email || !tel) {
+    alert('Por favor, preencha todos os campos obrigatórios.'); return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    alert('Por favor, insira um Gmail válido.'); return;
+  }
+
+  const isMinor = parseInt(idade) < 18;
+  const gEmail = isMinor ? document.getElementById('g-email').value.trim() : '';
+  const gTel   = isMinor ? document.getElementById('g-tel').value.trim() : '';
+  const dateFormatted = nasc ? new Date(nasc + 'T12:00:00').toLocaleDateString('pt-BR') : '—';
+
+  const rows = [
+    { key:'Nome completo', val:`${nome} ${sob}`, full:true },
+    { key:'Idade', val:`${idade} anos` },
+    { key:'Nascimento', val:dateFormatted },
+    { key:'Gmail', val:email, full:true },
+    { key:'Telefone', val:tel },
+    { key:'CPF', val:cpf || '—' },
+  ];
+  if (isMinor && gEmail) rows.push({ key:'Gmail Responsável', val:gEmail, full:true });
+  if (isMinor && gTel)   rows.push({ key:'Tel. Responsável',  val:gTel });
+
+  document.getElementById('info-grid').innerHTML = rows.map(r =>
+    `<div class="info-item${r.full?' full':''}">
+      <span class="info-key">${r.key}</span>
+      <span class="info-val">${r.val}</span>
+    </div>`
+  ).join('');
+
+  document.getElementById('register-form-wrap').style.display = 'none';
+  document.getElementById('confirm-screen').classList.add('show');
+
+  // Save username for games page
+  window._kramaUser = nome;
+});
+
+/* ── Edit ────────────────────────────────────────────────── */
+document.getElementById('btn-edit').addEventListener('click', () => {
+  document.getElementById('confirm-screen').classList.remove('show');
+  document.getElementById('register-form-wrap').style.display = 'block';
+});
+
+/* ── Confirm → Success ───────────────────────────────────── */
+document.getElementById('btn-confirm').addEventListener('click', () => {
+  document.getElementById('confirm-screen').classList.remove('show');
+  document.getElementById('success-screen').classList.add('show');
+});
+
+/* ── Success → Games ─────────────────────────────────────── */
+document.getElementById('btn-go-site').addEventListener('click', () => {
+  goToGames(window._kramaUser || 'Jogador');
+});
+document.getElementById('btn-go-login-after').addEventListener('click', () => {
+  document.getElementById('success-screen').classList.remove('show');
+  document.getElementById('register-form-wrap').style.display = 'block';
+  showAuthPanel('login');
+});
+
+/* ── Login → Games ───────────────────────────────────────── */
+document.getElementById('btn-login').addEventListener('click', () => {
+  const user  = document.getElementById('l-user').value.trim();
+  const senha = document.getElementById('l-senha').value.trim();
+  if (!user || !senha) { alert('Preencha seu usuário/Gmail e senha.'); return; }
+  window._kramaUser = user.split('@')[0];
+  goToGames(window._kramaUser);
+});
+
+/* ── Game tabs ───────────────────────────────────────────── */
+const gameThemes = {
+  rdr:  'game-rdr',
+  mc:   'game-mc',
+  gow:  'game-gow',
+  tlou: 'game-tlou',
+  gta:  'game-gta',
+};
+const gamesScreen = document.getElementById('screen-games');
+
+document.querySelectorAll('.game-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const g = tab.dataset.game;
+
+    // Switch tab active
+    document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+
+    // Switch theme
+    gamesScreen.className = 'screen active ' + (gameThemes[g] || '');
+
+    // Switch content
+    document.querySelectorAll('.game-content').forEach(c => c.classList.remove('active'));
+    document.getElementById('content-' + g).classList.add('active');
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
